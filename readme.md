@@ -1,3 +1,7 @@
+# Fork of FullCalendar.io
+Added NepaliView support.
+Demo: [Nepali Full Calendar](shekhardesigner.github.io/fullcalendar)
+
 # FullCalendar
 
 A full-sized drag & drop event calendar (jQuery plugin).
