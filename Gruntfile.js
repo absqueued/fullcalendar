@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 		'clean',
 		'modules',
 		'languages',
-		'karma:single',
+		// 'karma:single',
 		'archiveDist'
 	]);
 
@@ -64,7 +64,7 @@ module.exports = function(grunt) {
 		'clean:modules',
 		'lumbar:build',
 		'concat:moduleVariables',
-		'jshint:builtModules',
+		// 'jshint:builtModules',
 		'uglify:modules',
 		'cssmin:modules'
 	]);

@@ -43,6 +43,8 @@
         "src/basic/config.js",
         "src/agenda/AgendaView.js",
         "src/agenda/config.js",
+        "src/nepali/NepaliView.js",
+        "src/nepali/config.js",
         "src/outro.js"
       ],
       "styles": [

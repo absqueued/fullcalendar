@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Nepali View</title>
+<meta charset='utf-8' />
+<link href='../dist/fullcalendar.css' rel='stylesheet' />
+<link href='../dist/fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='../lib/moment/moment.js'></script>
+<script src='../lib/jquery/dist/jquery.js'></script>
+<script src='../../nepali-date-conversion/js/NepaliDateConversion.js'></script>
+<script src='../../nepali-date-conversion/NepaliDateConverter/NepaliCalendar.js'></script>
+<script src='../dist/fullcalendar.js'></script>
+<script>
+
+	$(document).ready(function() {
+
+				function getNepaliTimeSlots (time) {
+			var timeSuffix = ['बिहान', 'दिउँसो', 'बेलुका', 'राती'],
+				timeText = time,
+				hour = parseInt(timeText.match(/[0-9]+/).join(), 10),
+				ampm = timeText.match(/[amAMpmPM]+/).join().toLowerCase(),
+				neText = NepaliDates.getNumber(hour);
+
+			if((hour > 0 && hour < 3) && ampm === 'am')
+				neText += ' ' + timeSuffix[3];
+			if(hour === 12 && ampm === 'am')
+				neText += ' ' + timeSuffix[3];
+			if((hour > 2 && hour < 10) && ampm === 'am')
+				neText += ' ' + timeSuffix[0]
+			if((hour > 9 && hour < 12) && ampm === 'am')
+				neText += ' ' + timeSuffix[1]
+			if(hour === 12 && ampm === 'pm')
+				neText += ' ' + timeSuffix[2];
+			if((hour > 0 && hour < 4) && ampm === 'pm')
+				neText += ' ' + timeSuffix[1];
+			if((hour > 3 && hour < 7) && ampm === 'pm')
+				neText += ' ' + timeSuffix[2]
+			if((hour > 6 && hour < 12) && ampm === 'pm')
+				neText += ' ' + timeSuffix[3]
+
+			return neText;
+
+		}
+
+		function getNepaliDateTitle (date, type) {
+			var engTitle = moment(date).format('YYYY-MM-DD'),
+				nepDate = NepaliDateConversion.toNepali(engTitle),
+				nepMonthTitle = NepaliDates.getMonth(nepDate.month) + '/' + NepaliDates.getMonth(nepDate.month + 1) + ' ' + NepaliDates.getNumber(nepDate.year),
+				nepDayTitle = NepaliDates.getMonth(nepDate.month) + ' ' + NepaliDates.getNumber(nepDate.day) + ' गते, ' + NepaliDates.getNumber(nepDate.year);
+
+			if(type === 'm')
+				return nepMonthTitle;
+			else
+				return nepDayTitle;
+		}
+
+
+		$('#calendar').fullCalendar({
+			customButtons: {
+				titleText: {
+					text: getNepaliDateTitle(moment().format('MMMM YYYY')),
+					click: function (e) {
+						return false;
+					}
+				},
+			},
+			header: {
+				left: 'prev next, titleText',
+				right: 'today agendaDay nepali'
+			},
+			defaultView: 'nepali',
+			eventLimit: true,
+			lang: 'en',
+			viewRender: function (view, elm) {
+				var nepWeeks = NepaliDates.getWeek('all'),
+					weekDay = NepaliDates.getWeek(moment(view.title).day() + 1);
+
+				$cal = elm;
+				
+				if(view.name === "nepali") {
+					$('.fc-titleText-button').text(getNepaliDateTitle(view.title, 'm'));				
+					$cal.find('.fc-widget-header .fc-day-header').each(function(index, item){
+						$(this).text(nepWeeks[index]);
+					});
+				}
+
+				if(view.name === 'agendaDay') {
+					$cal.find('.fc-widget-header .fc-day-header').text(weekDay);
+					if($('.fc-bg .fc-axis span').text() === 'all-day')
+						$('.fc-bg .fc-axis span').text('दिनभरि');
+					$('.fc-titleText-button').text(getNepaliDateTitle(view.title, 'd'));
+
+					$('.fc-slats .fc-axis.fc-time span').each(function(index, item) {
+						$(this).text(getNepaliTimeSlots($(this).text()));
+					});				
+				}
+			},
+			events: [
+				{
+					title: 'All Day Event',
+					start: '2015-09-27',
+					allDay: true
+				},
+				{
+					title: 'All Day Event 2',
+					start: '2015-09-27',
+					allDay: true
+				},
+				{
+					title: 'All Day Event 3',
+					start: '2015-09-27',
+					allDay: true
+				},
+				{
+					title: 'All Day Event 4',
+					start: '2015-09-27',
+					allDay: true
+				},
+				{
+					title: 'Long Event',
+					start: '2015-09-07',
+					end: '2015-09-10'
+				},
+				{
+					id: 999,
+					title: 'Repeating Event',
+					start: '2015-09-09T16:00:00'
+				},
+				{
+					id: 999,
+					title: 'Repeating Event',
+					start: '2015-09-16T16:00:00'
+				},
+				{
+					title: 'Conference',
+					start: '2015-09-11',
+					end: '2015-09-13'
+				},
+				{
+					title: 'Meeting',
+					start: '2015-09-12T10:30:00',
+					end: '2015-09-12T12:30:00'
+				},
+				{
+					title: 'Lunch',
+					start: '2015-09-12T12:00:00'
+				},
+				{
+					title: 'Meeting',
+					start: '2015-09-12T14:30:00'
+				},
+				{
+					title: 'Happy Hour',
+					start: '2015-09-12T17:30:00'
+				},
+				{
+					title: 'Dinner',
+					start: '2015-09-12T20:00:00'
+				},
+				{
+					title: 'Birthday Party',
+					start: '2015-09-13T07:00:00'
+				},
+				{
+					title: 'Click for Google',
+					url: 'http://google.com/',
+					start: '2015-09-28'
+				}
+			]
+		});
+		
+	});
+
+</script>
+<style>
+
+	body {
+		margin: 40px 10px;
+		padding: 0;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		font-size: 14px;
+	}
+
+	#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+
+	.fc-nepali-month {
+		float: left;
+		color:gray;
+	}
+
+	.fc-time span {
+		font-size: 12px;
+	}
+
+</style>
+</head>
+<body>
+
+	<div id='calendar'></div>
+
+</body>
+</html>
