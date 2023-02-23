@@ -1,6 +1,6 @@
 # Fork of FullCalendar.io
 Added NepaliView support.
-Demo: [Nepali Full Calendar](https://shekhardesigner.github.io/fullcalendar)
+Demo: [Nepali Full Calendar](https://absqueued.github.io/fullcalendar)
 
 # FullCalendar
 
